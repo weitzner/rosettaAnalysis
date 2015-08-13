@@ -1,0 +1,11 @@
+Package: rosettaAnalysis
+Type: Package
+Title: Plot and Analysis Tools for Rosetta Results
+Version: 0.1
+Date: 2015-08-12
+Author: Brian D. Weitzner <brian.weitzner@gmail.com>
+Maintainer: Brian D. Weitzner <brian.weitzner@gmail.com>
+Description: Some helpful tools for quickly generating typical plots to visualize
+    the results of a Rosetta simulaiton.
+License: MIT
+LazyData: TRUE
