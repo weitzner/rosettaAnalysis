@@ -19,6 +19,6 @@ A data.frame with the discrimination score for each target in the input data.fra
 Calculate the discrimination score for each cutoff
 }
 \examples{
-d.scores <- discrimination.scores(score.data, divs = c(0.5, 1.0, 1.5, 2.0))
+d.scores <- discrimination.scores(score.data, groups = c("label", "model.type"), divs = c(0.5, 1.0, 1.5, 2.0))
 }
 
