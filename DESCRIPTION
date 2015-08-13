@@ -7,9 +7,11 @@ Author: Brian D. Weitzner <brian.weitzner@gmail.com>
 Maintainer: Brian D. Weitzner <brian.weitzner@gmail.com>
 Description: Some helpful tools for quickly generating typical plots to visualize
     the results of a Rosetta simulaiton.
-Imports:
+Depends:
     R (>= 3.2.0),
-    cowplot (>= 0.5.0),
     dplyr (>= 0.4.2),
+    lazyeval (>= 0.1.10),
+Imports:
+    cowplot (>= 0.5.0),
 License: MIT
 LazyData: TRUE

@@ -6,30 +6,15 @@ disc.score <- function(x_col, y_col, divs) {
   disc.score <- 0
   for (div in divs) {
     left <- y_col[x_col <= div]
-    left.of.div <- ifelse(length(left) != 0, min(left), 0.0)
+    left.of.div <- ifelse(length(left), min(left), 0.0)
     
     right <- y_col[x_col > div]
-    right.of.div <- ifelse(length(right) != 0, min(right), 0.0)
+    right.of.div <- ifelse(length(right), min(right), 0.0)
     
     disc.score <- disc.score + (left.of.div - right.of.div)
   }
   return(disc.score / length(disc.divs))
 }
-
-#### Old implementation that requires the data.frame to be passed through
-# disc.score <- function(df, x_col, y_col, divs) {
-#   disc.score <- 0
-#   for (div in divs) {
-#     left <- df[df[, x_col] <= div, y_col]
-#     left.of.div <- ifelse(length(left) != 0, min(left), 0.0)
-#     
-#     right <- df[df[, x_col] > div, y_col]
-#     right.of.div <- ifelse(length(right) != 0, min(right), 0.0)
-#     
-#     disc.score <- disc.score + (left.of.div - right.of.div)
-#   }
-#   return(disc.score / length(disc.divs))
-# }
 
 
 #' Calculate the discrimination score for each cutoff
@@ -43,9 +28,15 @@ disc.score <- function(x_col, y_col, divs) {
 #' d.scores <- discrimination.scores(score.data, groups = c("label", "model.type"), divs = c(0.5, 1.0, 1.5, 2.0))
 #' @export
 discrimination.scores <- function(df, groups = c("label", "model.type"), divs = c(1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 6.0)) {
-
-  # I don't like it, but for now, the 'scaled_total_score' and 'H3_RMS' (although I could make the x_col a string -- mysteries!) are hard-coded
-  disc.scores <- df %>% group_by_(.dots = lapply(groups, as.symbol)) %>% summarize( disc.score = disc.score(H3_RMS, scaled_total_score, disc.divs))
-  disc.scores$disc.score <- format(disc.scores$disc.score, digits=2)
+  # I don't like it, but for now, 'H3_RMS' and 'scaled_total_score' are hard-coded
+  rms_col <- as.name("H3_RMS")
+  score_col <- as.name("scaled_total_score")
+  
+  disc.scores <- df %>% 
+    group_by_(.dots = groups) %>% 
+    dplyr::summarize_(disc.score = interp(~disc.score(x_col_name, y_col_name, divs), 
+                                          .values = c(x_col_name = rms_col, y_col_name = score_col)))
+  
+  disc.scores$disc.score <- format(disc.scores$disc.score, digits = 2)
   return(disc.scores)
 }
