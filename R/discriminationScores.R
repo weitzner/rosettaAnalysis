@@ -1,6 +1,6 @@
 
 # *************************************************
-#                     Utilities
+#          Discrimination Score Functions
 # *************************************************
 disc.score <- function(x_col, y_col, divs) {
   disc.score <- 0
