@@ -2,3 +2,5 @@
 
 export(calc.disc.scores)
 export(calc.scaled.scores)
+export(getScoreDataFromFile)
+export(getScoreDataFromFilesInDir)
