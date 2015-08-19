@@ -62,7 +62,7 @@ getScoreDataFromFilesInDir <- function(directory, label,
   rmsd.data$label <- sub("^[[:alpha:]]+", "", rmsd.data$decoy)
   
   # strip the first underscore and everything that follows it
-  rmsd.data$label <- as.factor(sub("?_[[:print:]]*$", "", rmsd.data$label))
+  rmsd.data$label <- as.factor(sub(".[[:print:]]*$", "", rmsd.data$label))
   
   # make native labels match the models' labels
   rmsd.data$label <- sub(".nat", "", rmsd.data$label)
