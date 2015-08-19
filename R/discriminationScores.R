@@ -13,7 +13,7 @@ disc.score <- function(x_col, y_col, divs) {
     
     disc.score <- disc.score + (left.of.div - right.of.div)
   }
-  return(disc.score / length(disc.divs))
+  return(disc.score / length(divs))
 }
 
 
