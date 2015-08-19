@@ -13,8 +13,9 @@
 #' score.data <- getScoreDataFromFile("1abc.json", cutoff = 0.95)
 #' @export
 getScoreDataFromFile <- function(fname, cutoff=0.95) {
-  pdb.score <- as.data.frame(do.call("rbind", lapply(fromJSON(file=fname),
-                                                     unlist)),
+  pdb.score <- as.data.frame(do.call("rbind", 
+                                     lapply(rjson::fromJSON(file = fname),
+                                            unlist)),
                              stringsAsFactors=FALSE)
   
   # convert columns to appropriate data types
@@ -39,7 +40,7 @@ getScoreDataFromFile <- function(fname, cutoff=0.95) {
 #'                                          pattern = "^[[:alnum:]]{4}.json$")
 #' @export
 getScoreDataFromFilesInDir <- function(directory, label, 
-                                       pattern = "^[[:alnum:]]{4}.json$") {
+                                       pattern = "^[[:alnum:]]{4}?.*.json$") {
   
   # '1abc.json' contains weighted scores (including constraint scores) and RMSD
   # add scorefile data to data.frame
@@ -59,13 +60,11 @@ getScoreDataFromFilesInDir <- function(directory, label,
   # the label will just be the PDB accession code for that decoy
   
   # strip any (alphabetical) prefix from the decoy name
-  rmsd.data$label <- sub("^[[:alpha:]]+", "", rmsd.data$decoy)
+  score.file.data$label <- sub("^[[:alpha:]]+", "", score.file.data$decoy)
   
   # strip the first underscore and everything that follows it
-  rmsd.data$label <- as.factor(sub(".[[:print:]]*$", "", rmsd.data$label))
-  
-  # make native labels match the models' labels
-  rmsd.data$label <- sub(".nat", "", rmsd.data$label)
+  score.file.data$label <- as.factor(sub("\\.[[:print:]]*$", "", 
+                                         score.file.data$label))
   
   return(score.file.data)
 }

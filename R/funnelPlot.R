@@ -30,20 +30,24 @@ funnel_plot <- function(df, x_val, y_val, n_col = 1, disc.scores=data.frame(),
   
   # right now this is hard-coded to my personal use case, but 
   font_size <- 10
-  p <- ggplot(data = df, aes_string(x = x_val, y = y_val, color = color_col)) +
-    geom_point(position = "jitter", size = 1.25) + 
-    scale_x_continuous("RMSD (Å)", breaks = pretty_breaks(n = 4)) +
-    expand_limits(x = 0) +
-    facet_wrap(~ label, ncol = n_col, scales = "free") + 
-    theme(axis.text.x = element_text(size = font_size),
-          axis.text.y = element_text(size = font_size),
-          axis.title = element_text(face = "plain", size = font_size + 2),
-          strip.background = element_blank())
+  p <- ggplot2::ggplot(data = df, ggplot2::aes_string(x = x_val, y = y_val, 
+                                                      color = color_col)) +
+    ggplot2::geom_point(position = "jitter", size = 1.25) + 
+    ggplot2::scale_x_continuous("RMSD (Å)", 
+                                breaks = scales::pretty_breaks(n = 4)) +
+    ggplot2::expand_limits(x = 0) +
+    ggplot2::facet_wrap(~ label, ncol = n_col, scales = "free") + 
+    cowplot::theme_cowplot() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(size = font_size),
+                   axis.text.y = ggplot2::element_text(size = font_size),
+                   axis.title = ggplot2::element_text(face = "plain", 
+                                                      size = font_size + 2),
+                   strip.background = ggplot2::element_blank())
     
   # use the colors that were passed in
   if (length(levels(as.factor(score.data[[color_col]]))) == length(colors)) {
     # we can use the colors specified by the user!
-    p <- p + scale_color_manual(values = colors)
+    p <- p + ggplot2::scale_color_manual(values = colors)
   } else if (length(colors)){
     print(paste("Length of colors does not match the number of levels in ",  
                 color_col, ". Letting ggplot pick the colors.", ssep = ""))
@@ -51,8 +55,9 @@ funnel_plot <- function(df, x_val, y_val, n_col = 1, disc.scores=data.frame(),
   
   # include the discrimination score in the lower right of the panel
   if (nrow(disc.scores)) {
-    p <- p + geom_text(aes(x = Inf, y = -Inf, label = paste(disc.score, "\n", 
-                                                        sep = "")), 
+    p <- p + ggplot2::geom_text(ggplot2::aes(x = Inf, y = -Inf, 
+                                             label = paste(disc.score, "\n", 
+                                                           sep = "")), 
                    # ggplot's ratio between geom_text and point size is 5/14
                    # who knows why
                    data = disc.scores, size = font_size * (5/14),
@@ -61,7 +66,7 @@ funnel_plot <- function(df, x_val, y_val, n_col = 1, disc.scores=data.frame(),
   
   native_name <- "nat_score"
   y_lims <- c(NA, NA)
-  y_breaks <- pretty_breaks(n = 4)
+  y_breaks <- scales::pretty_breaks(n = 4)
   
   if (y_val == "scaled.score") {
     native_name <- "scaled.nat.score"
@@ -69,7 +74,8 @@ funnel_plot <- function(df, x_val, y_val, n_col = 1, disc.scores=data.frame(),
     y_breaks <- seq(-1, 1, 0.5)
   }
   
-  p <- p + geom_hline(aes_string(yintercept = native_name), linetype = "dashed") +
-    scale_y_continuous("Score", limits = y_lims, breaks = y_breaks)
+  p <- p + ggplot2::geom_hline(ggplot2::aes_string(yintercept = native_name), 
+                               linetype = "dashed") +
+    ggplot2::scale_y_continuous("Score", limits = y_lims, breaks = y_breaks)
   return(p)
 }

@@ -24,9 +24,8 @@ WHERE
 #' tau.alpha.data <- get.tau.alpha.from.db("someFile.db3", "antibodies")
 #' @export
 get.tau.alpha.from.db <- function(dbFile, label) {
-  sqlite <- dbDriver("SQLite")
-  tau_alpha_rows <- dbGetQuery(dbConnect(sqlite, dbFile), 
-                               query)
+  tau_alpha_rows <- RSQLite::dbGetQuery(RSQLite::dbConnect(RSQLite::SQLite(), 
+                                                           dbFile), query)
   tau_alpha_rows$model.type <- label
   
   tau_alpha_rows$label <- sub(".pdb.gz$", "", tau_alpha_rows$label)
