@@ -2,5 +2,7 @@
 
 export(calc.disc.scores)
 export(calc.scaled.scores)
+export(funnel_plot)
+export(get.tau.alpha.from.db)
 export(getScoreDataFromFile)
 export(getScoreDataFromFilesInDir)
