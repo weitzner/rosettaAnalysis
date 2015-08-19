@@ -54,5 +54,18 @@ getScoreDataFromFilesInDir <- function(directory, label,
   
   # indicate that all of these points are from the same set
   score.file.data$model.type <- label
+  
+  # add a label field to the data.frame
+  # the label will just be the PDB accession code for that decoy
+  
+  # strip any (alphabetical) prefix from the decoy name
+  rmsd.data$label <- sub("^[[:alpha:]]+", "", rmsd.data$decoy)
+  
+  # strip the first underscore and everything that follows it
+  rmsd.data$label <- as.factor(sub("?_[[:print:]]*$", "", rmsd.data$label))
+  
+  # make native labels match the models' labels
+  rmsd.data$label <- sub(".nat", "", rmsd.data$label)
+  
   return(score.file.data)
 }
